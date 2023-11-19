@@ -47,14 +47,21 @@ Pada projek ini, akan dibuat program CBIR menggunakan parameter warna dan tekstu
 
 ## Cara Menggunakan
 
-1. Please make sure you've installed tkinter and all the above technologies that we use
-2. In `src/` folder type `python app.py`
-3. Begin to use our app, select your own dataset and your own test-image
+1. Clone github, buka terminal
+2. Ganti directory ke websitefe
+3. Install semua dependencies yang diperlukan seperti, npm i, install node js
+4. Lalu jalankan frontend dengan cara npm run dev
+5. Buka terminal baru
+6. Ganti directory ke backend
+7. Install semua dependencies yang diperlukan seperti, pip install -r rec.txt, pastikan anda sudah menginstall python, jika belum install terlebih dahulu
+8. Lalu jalankan backend dengan cara python -m uvicorn main:app
+9. Buka link web pada frontend, web siap digunakan
+
+Note: mungkin akan terdapat kesalahan saat menjalankan backend, hal ini bisa terjadi karena ip addrres belum ditambahkan di database, mohon untuk contact salah satu dari kami, terimakasih.
 
 ## Screenshot
 
-![Example screenshot](./img/screenshot.png)
-Video [this tutorial](https://www.example.com).
+![Tampilan Web](./img/tampilanWebsite.png).
 
 ## Project Status
 
