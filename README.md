@@ -43,6 +43,8 @@ Pada projek ini, akan dibuat program CBIR menggunakan parameter warna dan tekstu
 - OpenCV
 - NumPy
 - FastAPI
+- NextJS
+- React
 
 ## Struktur Program
 
@@ -94,7 +96,7 @@ Pada projek ini, akan dibuat program CBIR menggunakan parameter warna dan tekstu
 ## Cara Menggunakan
 
 1. Please make sure you've installed tkinter and all the above technologies that we use
-2. In `src/` folder type `python app.py`
+2. In `src/` folder type `python app.py` 
 3. Begin to use our app, select your own dataset and your own test-image
 
 ## Screenshot
