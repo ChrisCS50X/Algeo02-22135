@@ -34,37 +34,3 @@ def compare(img1,img2):
     norm1 = np.linalg.norm(img1)
     norm2 = np.linalg.norm(img2)
     return hasilDot/(norm1*norm2)
-
-def teksturToChace(data_directory):
-    list_of_files = os.listdir(data_directory)
-    dataset=[]
-    for filename in list_of_files:
-        print(filename)
-        sim = []
-        dataset_image = cv2.imread(os.path.join(data_directory, filename))
-        dataset_tekstur = tekstur(dataset_image)
-        sim.append(dataset_tekstur)
-        sim.append(filename)
-        dataset.append(sim)
-        print(dataset)
-    return dataset
-
-def arrToCSV(arr,pathCSV):
-    with open(pathCSV,'w',newline='') as fileCSV:
-        nameCSV = ['hasil','pathImg']
-        write = csv.DictWriter(fileCSV,fieldnames=nameCSV)
-        write.writeheader()
-        for row in arr:
-            write.writerow(row)
-
-def csvToArr(pathCSV):
-    dataset=[]
-    df = pd.read_csv(pathCSV)
-    df['hasil']=df['hasil'].apply(eval)
-    for index,row in df.iterrows():
-        sim=[]
-        hasil,pathImg=row['hasil'],row['pathImg']
-        sim.append(hasil)
-        sim.append(pathImg)
-        dataset.append(sim)
-    return dataset
