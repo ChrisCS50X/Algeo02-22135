@@ -2,11 +2,16 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { time } from 'console';
+import Pagination from '@mui/material/Pagination';
+
 
 const ImageGallery = ({ resultData,resultTime } : any) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [imagesPerPage] = useState(6);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  
 
   const handleImageClick = async (image:any) => {
     try {
@@ -52,6 +57,7 @@ const ImageGallery = ({ resultData,resultTime } : any) => {
     }
     
     try {
+      setLoading(true);
       const response = await fetch('http://127.0.0.1:8000/uploadtodatabase/', {
         method: 'POST',
         body: "tes",
@@ -59,28 +65,38 @@ const ImageGallery = ({ resultData,resultTime } : any) => {
 
       const data = await response.json();
       console.log(data);
+      setLoading(false);
     } catch (error) {
       console.error('Error uploading file:', error);
+      setLoading(false);
     }
   };
 
   
-
+  // Change page
+  const [page, setPage] = React.useState(1);
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
   // Get current images
-  const indexOfLastImage = currentPage * imagesPerPage;
+  const indexOfLastImage = page * imagesPerPage;
   const indexOfFirstImage = indexOfLastImage - imagesPerPage;
   const currentData = resultData.slice(indexOfFirstImage, indexOfLastImage);
 
-  // Change page
-  const paginate = (pageNumber : any) => setCurrentPage(pageNumber);
+
 
   return (
     <div>
-        <div className='flex justify-between my-5'>
-            <p className="text-blue-500 font-extrabold font-poppins">Result</p>
-            <p className="font-poppins">{resultData.length} results in {resultTime.toFixed(2)} seconds</p>
-        </div>
-
+      <div className='flex justify-between my-5'>
+        <p className="text-blue-500 font-extrabold font-poppins">Result</p>
+        <p className="font-poppins">{resultData.length} results in {resultTime.toFixed(2)} seconds</p>
+      </div>
+      {loading ? (
+        // Display a loading spinner or message
+        <div className='justify-center'>Loading...</div>
+      ) : (
+        // Your regular content goes here
+        <>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
         {currentData.map((data : any, index : any) => (
         <figure key={index} className="w-full relative rounded-md drop-shadow-lg flex justify-center">
@@ -91,11 +107,10 @@ const ImageGallery = ({ resultData,resultTime } : any) => {
         </figure>
         ))}
       </div>
-      <Pagination
-        imagesPerPage={imagesPerPage}
-        totalImages={resultData.length}
-        paginate={paginate}
-      />
+      <br></br>
+      <div className='flex justify-center'>
+      <Pagination count={Math.ceil(resultData.length/6)} page={page} shape="rounded" onChange={handleChange} /></div>
+      <br></br>
       <hr className="w-full h-1 bg-[#d9d9d9]"></hr>
       <form action="">
         <div className="flex justify-center mb-10">
@@ -105,30 +120,13 @@ const ImageGallery = ({ resultData,resultTime } : any) => {
             </label>
         </div>
       </form>
+      </>
+      )}
+      
     </div>
   );
 };
 
-const Pagination = ({ imagesPerPage, totalImages, paginate } : any) => {
-  const pageNumbers = [];
 
-  for (let i = 1; i <= Math.ceil(totalImages / imagesPerPage); i++) {
-    pageNumbers.push(i);
-  }
-
-  return (
-    <nav className="flex justify-center mt-4">
-      <ul className="flex">
-        {pageNumbers.map(number => (
-            <div key={number} onClick={() => paginate(number)} className="text-decoration-none">
-                <li className="mx-1 my-5 px-4 py-2 border-solid border-blue-600 border-2 bg-white hover:bg-blue-600 text-blue-600 hover:text-white rounded-lg cursor-pointer">
-                    {number}
-                </li>
-            </div>
-        ))}
-      </ul>
-    </nav>
-  );
-};
 
 export default ImageGallery;

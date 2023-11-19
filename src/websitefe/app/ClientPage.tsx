@@ -5,6 +5,7 @@ import ImageGallery from "./ImageGallery"
 const ClientPage = () => {
     const [result,setResult] = useState([])
     const [time,setTime] = useState(0)
+    const [loading, setLoading] = useState(false);
     const handleUpload = async ({isChecked,image}:{isChecked:any,image:any}) => {
         console.log(isChecked,image)
 
@@ -17,6 +18,7 @@ const ClientPage = () => {
         //     },
         //   });
         try {
+            setLoading(true);
             if(isChecked){
                 const endPoint = "http://127.0.0.1:8000/uploadfile/";
                 const res = await fetch(endPoint, {
@@ -26,6 +28,7 @@ const ClientPage = () => {
                 const data = await res.json();
                 console.log(data)
                 setResult(data)
+                setLoading(false);
             }else{
                 const endPoint = "http://127.0.0.1:8000/uploadfile2/";
                 const res = await fetch(endPoint, {
@@ -34,6 +37,7 @@ const ClientPage = () => {
                 })
                 const data = await res.json();
                 setResult(data)
+                setLoading(false);
             }
         }
         catch (err) {
@@ -45,14 +49,23 @@ const ClientPage = () => {
             });
             const data = await response.json();
             setTime(data);
+            setLoading(false);
           } catch (error) {
           }
       
     };
     return <div>
+         {loading ? (
+        // Display a loading spinner or message
+        <div className="flex items-center justify-center h-screen">Loading...</div>
+      ) : (
+        // Your regular content goes here
+        <>
         <InputImage onSearch={handleUpload} />
         <hr className="w-full h-1 bg-[#d9d9d9]"></hr>
         <ImageGallery resultData={result} resultTime={time}/>
+        </>
+      )}  
     </div>
 }
 

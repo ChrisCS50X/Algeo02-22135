@@ -3,16 +3,35 @@ import { useState } from 'react';
 const InputImage = ({onSearch}:any) => {
     const [image, setImage] = useState('');
     const [isChecked, setIsChecked] = useState(false);
+    const [error, setError] = useState('');
+    
     const handleToggle = () => {
         setIsChecked(!isChecked);
-    }
-    const handleImageChange = (e : any) => {
-        setImage(e.target.files[0]);
     };
-    const searchHandler = (e:any) =>{
+
+    const handleImageChange = (e: any) => {
+        setImage(e.target.files[0]);
+        setError(''); // Reset the error when a new image is selected
+    };
+
+    const searchHandler = async (e: any) => {
         e.preventDefault();
-        onSearch({isChecked,image})
-    }
+
+        // Check if the required fields are filled
+        if (!image) {
+        setError('Please select an image.');
+        return;
+        }
+
+        try {
+        // Perform your search or data processing here
+        await onSearch({ isChecked, image });
+        } catch (error) {
+        console.error('Error during search:', error);
+        setError('An error occurred during the search.');
+        }
+    };
+
     return (
         <>
             <form action="" onSubmit={searchHandler}>
@@ -49,6 +68,7 @@ const InputImage = ({onSearch}:any) => {
                         <button type='submit' className="transition-all duration-500 bg-size-200 bg-pos-0 hover:bg-pos-100 font-poppins font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 py-2 rounded-full text-white mt-2 w-48" >Search</button>
                     </div>
                 </div>
+                {error && <div className="text-red-500">{error}</div>}
             </form>
         </>
     )

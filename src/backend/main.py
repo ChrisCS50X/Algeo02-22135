@@ -140,6 +140,7 @@ def insert_colour(data_director):
 
 @app.post("/uploadfile/")
 async def create_upload_file(file: UploadFile = File(...)):
+    start_time = time.time()
     image_content = await file.read()
     nparr = np.frombuffer(image_content, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
@@ -164,10 +165,14 @@ async def create_upload_file(file: UploadFile = File(...)):
         image = cv2.imread(os.path.join(folder_path, sorted_filenames[i]))
         _,buffer = cv2.imencode('.JPG',image)
         image_encode = base64.b64encode(buffer.tobytes()).decode("utf-8")
-        hasil.append({
-            "persentase":sorted_similarities[i],
-            "images":image_encode
-        })
+        if(sorted_similarities[i]>=60):
+            hasil.append({
+                "persentase":sorted_similarities[i],
+                "images":image_encode
+            })
+    end_time = time.time()
+    global global_waktu 
+    global_waktu = end_time - start_time
     return hasil
     
 @app.post("/uploadfile2/")
@@ -182,14 +187,15 @@ async def create_upload_file(file: UploadFile = File(...)):
     print(pathCSV)
     sorted_indices, sorted_similarities,sorted_filenames = CBIR_colour.compareimagehsv(img, pathCSV)
     hasil = []
-    for i in range(50):
+    for i in range(len(sorted_indices)):
         image = cv2.imread(os.path.join(folder_path, sorted_filenames[i]))
         _,buffer = cv2.imencode('.JPG',image)
         image_encode = base64.b64encode(buffer.tobytes()).decode("utf-8")
-        hasil.append({
-            "persentase":sorted_similarities[i],
-            "images":image_encode
-        })
+        if(sorted_similarities[i]>=60):
+            hasil.append({
+                "persentase":sorted_similarities[i],
+                "images":image_encode
+            })
     print("sukses")
     end_time = time.time()
     global global_waktu 
@@ -208,7 +214,7 @@ async def upload_files(file: UploadFile = File(...)):
 
 @app.post("/uploadtodatabase")
 async def upload_files_toDB():
-    # insert_tekstur(folder_path,"tesss")
+    insert_tekstur(folder_path,"tesss")
     insert_colour(folder_path)
     print("sukses")
 
