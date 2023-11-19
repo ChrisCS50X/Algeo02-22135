@@ -107,6 +107,8 @@ def compareimagehsv(input_image, csv_file):
     return sorted_indices, sorted_similarities, sorted_filenames
 
 
+#Untuk melakukan debugging
+'''
 # Melakukan running program yakni driver_colour
 def run():
     data_directory = "C:\\Users\\chris\\Documents\\Semester 3 Informatika\\Tubes Algeo 2\\Image"  
@@ -145,3 +147,4 @@ def runhsv():
 
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+'''
